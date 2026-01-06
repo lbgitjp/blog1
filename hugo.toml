@@ -1,0 +1,4 @@
+baseurl = "https://lbgitjp.github.io/blog1/"
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = 'ananke'
