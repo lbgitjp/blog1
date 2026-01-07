@@ -1,0 +1,37 @@
+# 参考: https://github.com/peaceiris/actions-gh-pages
+
+name: Build and Deploy Hugo Site
+
+on:
+  push:
+    branches:
+      - main  # 当push到main分支时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # 添加此行以授予写入权限，未加此行时会出错
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: true  # 如果您的主题使用子模块，请启用
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'  # 或指定版本，如'0.154.2'
+          extended: true  # 如果使用Hugo扩展版
+
+      - name: Build site
+        run: hugo --minify  # 构建静态文件到public文件夹
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 使用内置令牌
+          publish_dir: ./public  # 源目录
+          publish_branch: gh-pages  # 目标分支
